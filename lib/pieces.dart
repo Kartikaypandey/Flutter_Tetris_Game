@@ -71,16 +71,17 @@ class Piece {
   /// https://stackoverflow.com/questions/16196039/java-tetris-rotations-using-rotation-matrices?rq=3
 
   void rotatePiece() {
+    for (int i = 0; i < position.length; i++) {
+      if (position[i] < 0) return;
+    }
     List<int> newPositions = [];
     int xOrigin = position[1] ~/ numCols;
     int yOrigin = position[1] % numCols;
-    debugPrint('Position $position');
     debugPrint('Xorigin $xOrigin YOrigin : $yOrigin');
     List<List<int>> matrix = [
       [0, 0, 0, 0],
       [0, 0, 0, 0],
     ];
-    debugPrint("------ START ----------");
     for (int i = 0; i < position.length; i++) {
       int x = position[i] ~/ numCols;
       int y = position[i] % numCols;
@@ -95,20 +96,11 @@ class Piece {
       matrix[1][i] = newY;
     }
 
-    debugPrint('--- Matrix ----');
-    debugPrint(matrix as String?);
-    debugPrint('--end');
-
     List<List<int>> matrixB = [
       [0, 1],
       [-1, 0],
     ];
-    debugPrint('');
-    debugPrint('');
     List<List<int>> result = multiplyMatrices(matrixB, matrix);
-    debugPrint("---- Result matrix ------");
-    debugPrint(result as String?);
-    debugPrint('---- END ------');
     for (int i = 0; i < result[0].length; i++) {
       int translatedX = result[0][i] + xOrigin;
       int translatedY = result[1][i] + yOrigin;
@@ -117,7 +109,6 @@ class Piece {
           'translatedX : $translatedX  translatedY: $translatedY  sol: $calc');
       newPositions.add(calc);
     }
-    debugPrint(newPositions as String?);
     if (piecePositionIsValid(newPositions)) {
       position = newPositions;
     }

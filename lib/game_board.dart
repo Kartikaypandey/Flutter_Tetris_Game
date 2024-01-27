@@ -30,7 +30,7 @@ class _GameBoardState extends State<GameBoard> {
 
   void startGame() {
     currentPiece.initPosition();
-    Duration gameSpeed = const Duration(milliseconds: 200);
+    Duration gameSpeed = const Duration(milliseconds: 400);
     gameLoop(gameSpeed);
   }
 
@@ -51,17 +51,22 @@ class _GameBoardState extends State<GameBoard> {
   void showGameOverDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Game over'),
-        content: Text('Current Score is $currentScore'),
-        actions: [
-          TextButton(
+      barrierDismissible: false, // This makes the dialog undissmissible
+      builder: (context) => PopScope(
+        canPop: false, // Disable the back button
+        child: AlertDialog(
+          title: const Text('Game over'),
+          content: Text('Current Score is $currentScore'),
+          actions: [
+            TextButton(
               onPressed: () {
                 Navigator.pop(context);
                 resetGame();
               },
-              child: const Text('Restart'))
-        ],
+              child: const Text('Restart'),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -116,7 +121,6 @@ class _GameBoardState extends State<GameBoard> {
           gameBoard[row][col] = currentPiece.type;
         }
       }
-
       createNewPiece();
     }
   }
